@@ -1,0 +1,31 @@
+
+> @tirbeo/support@0.0.1 build C:\Users\gwbis\Downloads\Tirbeo-All\apps\support
+> next build
+
+▲ Next.js 16.2.12 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 31.6s
+  Running TypeScript ...
+  Finished TypeScript in 59s ...
+  Collecting page data using 9 workers ...
+  Generating static pages using 9 workers (0/7) ...
+  Generating static pages using 9 workers (1/7) 
+  Generating static pages using 9 workers (3/7) 
+  Generating static pages using 9 workers (5/7) 
+✓ Generating static pages using 9 workers (7/7) in 12.1s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /contact
+├ ○ /help
+├ ○ /tickets
+├ ƒ /tickets/[id]
+└ ○ /tickets/create
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
