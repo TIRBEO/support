@@ -1,3 +1,0 @@
-module.exports=[81502,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(39035);a.n(d("[project]/packages/theme/dist/index.js <module evaluation>"))},95032,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(39035);a.n(d("[project]/packages/theme/dist/index.js"))},16164,a=>{"use strict";a.i(81502);var b=a.i(95032);a.n(b)},49883,a=>{"use strict";var b=a.i(78922),c=a.i(16164);a.s(["default",0,function({children:a}){return(0,b.jsx)("html",{lang:"en",children:(0,b.jsx)("body",{children:(0,b.jsx)(c.TirbeoThemeProvider,{children:a})})})},"metadata",0,{title:"Support — Tirbeo",description:"Tirbeo support and contact"}])},50138,a=>{a.n(a.i(49883))}];
-
-//# sourceMappingURL=_0cq5jue._.js.map
