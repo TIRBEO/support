@@ -10,9 +10,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@tirbeo/icons": "^1.0.0",
-    "@tirbeo/theme": "^1.0.0",
-    "@tirbeo/ui": "^1.0.0",
+    "@tirbeo/icons": "^1",
+    "@tirbeo/theme": "^1",
+    "@tirbeo/ui": "^1",
     "lucide-react": "1.28.0",
     "next": "16.2.12",
     "react": "^19.2.8",
@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
-    "@tirbeo/config": "^0.0.1",
+    "@tirbeo/config": "^0",
     "@types/node": "26.1.2",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
