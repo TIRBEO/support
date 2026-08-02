@@ -1,6 +1,6 @@
 {
   "installCommand": "rm -rf node_modules && npm install --legacy-peer-deps",
-  "buildCommand": "pnpm build",
+  "buildCommand": "npm run build",
   "headers": [
     {
       "source": "/(.*)",
