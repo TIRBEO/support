@@ -5,7 +5,7 @@ const API = (() => {
       return 'http://localhost:3000';
     }
   }
-  return 'https://api.tirbeo.app';
+  return process.env.NEXT_PUBLIC_API_URL || 'https://api.tirbeo.app';
 })();
 
 export class ApiError extends Error {

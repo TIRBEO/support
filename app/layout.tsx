@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { TirbeoThemeProvider } from "@tirbeo/theme";
+import { SupportShell } from "./shell";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -11,7 +12,9 @@ export default function SupportLayout({ children }: { children: React.ReactNode 
   return (
     <html lang="en">
       <body>
-        <TirbeoThemeProvider>{children}</TirbeoThemeProvider>
+        <TirbeoThemeProvider>
+          <SupportShell>{children}</SupportShell>
+        </TirbeoThemeProvider>
       </body>
     </html>
   );
