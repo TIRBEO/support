@@ -8,7 +8,8 @@ import { ArrowLeft, Loader2, Send, MessageSquare, Clock, AlertCircle } from 'luc
 
 interface TicketDetail {
   id: string;
-  title: string;
+  subject: string;
+  title?: string;
   description: string;
   status: string;
   priority: string;
@@ -102,11 +103,11 @@ export default function TicketDetailPage() {
           Back to tickets
         </button>
 
-        <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-sm mb-6">
+        <div className="border-2 border-[var(--color-border)] bg-[var(--color-surface)] shadow-brutal-sm mb-6">
           <div className="p-6 border-b border-[var(--color-border)]">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h1 className="text-xl font-semibold text-[var(--color-text)] mb-2">{ticket.title}</h1>
+                <h1 className="text-xl font-semibold text-[var(--color-text)] mb-2">{ticket.subject || ticket.title}</h1>
                 <div className="flex items-center gap-3">
                   <span className={cn('inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium', getStatusColor(ticket.status))}>
                     {ticket.status.replace('_', ' ')}
@@ -152,11 +153,11 @@ export default function TicketDetailPage() {
             <form onSubmit={handleSendMessage} className="flex gap-3">
               <input type="text" value={message} onChange={e => setMessage(e.target.value)}
                 placeholder="Type your message..."
-                className="flex-1 px-4 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-sm outline-none focus:border-[var(--color-primary)]"
+                className="flex-1 px-4 py-2.5 border-2 border-[var(--color-border)] bg-[var(--color-bg)] text-sm outline-none focus:border-[var(--color-primary)] focus:shadow-brutal-sm"
                 onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendMessage(e); } }}
               />
               <button type="submit" disabled={sending || !message.trim()}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--color-primary)] text-white text-sm font-medium hover:bg-[var(--color-primary-hover)] transition-colors disabled:opacity-50">
+                className="inline-flex items-center gap-2 px-4 py-2.5 border-2 bg-[var(--color-primary)] text-[var(--color-bg)] text-sm font-medium shadow-brutal-sm hover:bg-[var(--color-primary-hover)] hover:shadow-brutal transition-all disabled:opacity-50">
                 {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               </button>
             </form>

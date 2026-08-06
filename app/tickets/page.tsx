@@ -11,7 +11,8 @@ import {
 
 interface Ticket {
   id: string;
-  title: string;
+  subject: string;
+  title?: string;
   status: string;
   priority: string;
   createdAt: string;
@@ -44,7 +45,7 @@ export default function TicketsPage() {
   };
 
   const filtered = tickets.filter(t => {
-    const matchesSearch = t.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = (t.subject || t.title || '').toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === 'all' || t.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -77,7 +78,7 @@ export default function TicketsPage() {
             <p className="mt-1 text-sm text-[var(--color-text-secondary)]">Manage your support requests</p>
           </div>
           <button onClick={() => router.push('/tickets/create')}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--color-primary)] text-white text-sm font-medium hover:bg-[var(--color-primary-hover)] transition-colors shadow-sm">
+            className="inline-flex items-center gap-2 px-5 py-2.5 border-2 bg-[var(--color-primary)] text-[var(--color-bg)] text-sm font-medium shadow-brutal-sm hover:bg-[var(--color-primary-hover)] hover:shadow-brutal transition-all">
             <Plus className="w-4 h-4" /> New Ticket
           </button>
         </div>
@@ -87,10 +88,10 @@ export default function TicketsPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-text-tertiary)]" />
             <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search tickets..."
-              className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-sm outline-none focus:border-[var(--color-primary)]" />
+              className="w-full pl-9 pr-4 py-2.5 border-2 border-[var(--color-border)] bg-[var(--color-surface)] text-sm outline-none focus:border-[var(--color-primary)] focus:shadow-brutal-sm" />
           </div>
           <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-            className="px-4 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-sm outline-none focus:border-[var(--color-primary)]">
+            className="px-4 py-2.5 border-2 border-[var(--color-border)] bg-[var(--color-surface)] text-sm outline-none focus:border-[var(--color-primary)] focus:shadow-brutal-sm">
             <option value="all">All statuses</option>
             <option value="open">Open</option>
             <option value="in_progress">In Progress</option>
@@ -104,12 +105,12 @@ export default function TicketsPage() {
             <Loader2 className="w-8 h-8 animate-spin text-[var(--color-primary)]" />
           </div>
         ) : filtered.length === 0 ? (
-          <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-12 text-center">
+          <div className="border-2 border-[var(--color-border)] bg-[var(--color-surface)] p-12 text-center shadow-brutal-sm">
             <MessageSquare className="w-12 h-12 mx-auto mb-4 text-[var(--color-text-tertiary)]" />
             <h3 className="text-lg font-medium text-[var(--color-text)] mb-1">No tickets found</h3>
             <p className="text-sm text-[var(--color-text-secondary)] mb-6">Create a ticket to get help from our team</p>
             <button onClick={() => router.push('/tickets/create')}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--color-primary)] text-white text-sm font-medium hover:bg-[var(--color-primary-hover)] transition-colors">
+              className="inline-flex items-center gap-2 px-5 py-2.5 border-2 bg-[var(--color-primary)] text-[var(--color-bg)] text-sm font-medium shadow-brutal-sm hover:bg-[var(--color-primary-hover)] hover:shadow-brutal transition-all">
               <Plus className="w-4 h-4" /> Create Ticket
             </button>
           </div>
@@ -117,12 +118,12 @@ export default function TicketsPage() {
           <div className="space-y-3">
             {filtered.map(ticket => (
               <div key={ticket.id} onClick={() => router.push(`/tickets/${ticket.id}`)}
-                className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 hover:border-[var(--color-primary-border)] transition-colors cursor-pointer">
+                className="border-2 border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-brutal-sm hover:border-[var(--color-primary-border)] hover:shadow-brutal transition-all cursor-pointer">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1.5">
                       {getPriorityIcon(ticket.priority)}
-                      <h3 className="text-sm font-semibold text-[var(--color-text)] truncate">{ticket.title}</h3>
+                      <h3 className="text-sm font-semibold text-[var(--color-text)] truncate">{ticket.subject || ticket.title}</h3>
                     </div>
                     <div className="flex items-center gap-3 text-xs text-[var(--color-text-tertiary)]">
                       <span className={cn('inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium', getStatusColor(ticket.status))}>

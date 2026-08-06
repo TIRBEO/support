@@ -6,7 +6,10 @@ import {
   type NavSection,
   type AppLink,
 } from "@tirbeo/ui";
-import { LifeBuoy, MessagesSquare, CircleHelp, FileText, Home } from "lucide-react";
+import { useThemeToggle } from "@tirbeo/theme";
+import { LifeBuoy, MessagesSquare, CircleHelp, FileText, Home, Sun, Moon } from "lucide-react";
+import { appUrl } from "@/lib/domains";
+import { accountsUrl } from "@/lib/auth";
 
 const NAV_SECTIONS: NavSection[] = [
   {
@@ -25,24 +28,33 @@ const NAV_SECTIONS: NavSection[] = [
 ];
 
 const APPS: AppLink[] = [
-  { id: "accounts", name: "Accounts", href: "https://accounts.tirbeo.app" },
-  { id: "dashboard", name: "Dashboard", href: "https://dashboard.tirbeo.app" },
-  { id: "forms", name: "Forms", href: "https://forms.tirbeo.app" },
-  { id: "admin", name: "Admin", href: "https://admin.tirbeo.app" },
-  { id: "www", name: "Website", href: "https://tirbeo.app" },
+  { id: "accounts", name: "Accounts", href: appUrl("accounts") },
+  { id: "dashboard", name: "Dashboard", href: appUrl("dashboard") },
+  { id: "forms", name: "Forms", href: appUrl("forms") },
+  { id: "admin", name: "Admin", href: appUrl("admin") },
+  { id: "www", name: "Website", href: appUrl("www") },
 ];
 
 export function SupportShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { isDark, toggle } = useThemeToggle();
 
   return (
+    <>
+      <button
+        onClick={toggle}
+        className="theme-toggle"
+        aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
+      >
+        {isDark ? <Sun className="w-5 h-5" strokeWidth={2} /> : <Moon className="w-5 h-5" strokeWidth={2} />}
+      </button>
     <DashboardShell
       navSections={NAV_SECTIONS}
       apps={APPS}
       brand={{ name: "Support" }}
       user={null}
-      onLogout={() => router.push("/")}
+      onLogout={() => { window.location.href = accountsUrl('/logout'); }}
       onNavigate={(href) => router.push(href)}
       currentPath={pathname}
       searchPlaceholder="Search help articles, tickets..."
@@ -67,5 +79,6 @@ export function SupportShell({ children }: { children: React.ReactNode }) {
     >
       {children}
     </DashboardShell>
+    </>
   );
 }

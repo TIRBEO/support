@@ -73,14 +73,14 @@ export default function HelpCenterPage() {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search for answers..."
-              className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] text-base outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-surface)] transition-all"
+              className="w-full pl-12 pr-4 py-3.5 border-2 border-[var(--color-border)] bg-[var(--color-surface)] text-base outline-none focus:border-[var(--color-primary)] focus:shadow-brutal-sm transition-all"
             />
           </div>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="w-full lg:w-64 flex-shrink-0">
-            <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-sm overflow-hidden">
+            <div className="border-2 border-[var(--color-border)] bg-[var(--color-surface)] shadow-brutal-sm overflow-hidden">
               <div className="px-4 py-3 border-b border-[var(--color-border)]">
                 <h2 className="text-sm font-semibold text-[var(--color-text)] uppercase tracking-wider">Categories</h2>
               </div>
@@ -113,7 +113,7 @@ export default function HelpCenterPage() {
 
           <div className="flex-1 min-w-0">
             {selectedArticle ? (
-              <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-sm">
+              <div className="border-2 border-[var(--color-border)] bg-[var(--color-surface)] shadow-brutal-sm">
                 <div className="p-6 border-b border-[var(--color-border)]">
                   <button onClick={() => setSelectedArticle(null)} className="text-sm text-[var(--color-primary)] hover:underline mb-3">
                     ← Back to results
@@ -128,7 +128,7 @@ export default function HelpCenterPage() {
                 </div>
               </div>
             ) : (
-              <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-sm overflow-hidden">
+              <div className="border-2 border-[var(--color-border)] bg-[var(--color-surface)] shadow-brutal-sm overflow-hidden">
                 <div className="px-6 py-4 border-b border-[var(--color-border)] flex items-center justify-between">
                   <h2 className="text-lg font-semibold text-[var(--color-text)]">
                     {selectedCategory === 'All' ? 'All Articles' : selectedCategory}
