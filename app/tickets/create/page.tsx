@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getCurrentUser, getLoginUrl } from '../../../lib/auth';
 import { api } from '../../../lib/api-client';
 import { CaptchaWidget } from '../../components/captcha/captcha-widget';
 import { ArrowLeft, Loader2, AlertCircle, ShieldAlert } from 'lucide-react';
 
-export default function CreateTicketPage() {
+function CreateTicketPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [user, setUser] = useState<any>(null);
@@ -136,5 +136,21 @@ Please review and unblock my form.`
         </form>
       </div>
     </div>
+  );
+}
+
+export default function CreateTicketRoute() {
+  // useSearchParams() triggers a CSR bailout during prerender; it must be
+  // wrapped in a Suspense boundary (nextjs.org/docs/messages/missing-suspense-with-csr-bailout)
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[var(--color-bg)]">
+          <div className="mx-auto max-w-2xl p-6 lg:p-8" />
+        </div>
+      }
+    >
+      <CreateTicketPage />
+    </Suspense>
   );
 }
