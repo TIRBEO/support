@@ -1,11 +1,11 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getCurrentUser, getLoginUrl } from '../../../lib/auth';
 import { api } from '../../../lib/api-client';
 import { CaptchaWidget } from '../../components/captcha/captcha-widget';
-import { ArrowLeft, Loader2, AlertCircle, ShieldAlert } from 'lucide-react';
+import { ArrowLeft, Loader2, AlertCircle, ShieldAlert, Paperclip, X } from 'lucide-react';
 
 function CreateTicketPage() {
   const router = useRouter();
@@ -30,6 +30,9 @@ Please review and unblock my form.`
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [captchaRayId, setCaptchaRayId] = useState('');
+  const [picked, setPicked] = useState<{ file: File; preview: string }[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     getCurrentUser().then(u => {
@@ -45,19 +48,46 @@ Please review and unblock my form.`
     setSubmitting(true);
     setError('');
     try {
+      const imageUrls: string[] = [];
+      if (picked.length > 0) {
+        setUploading(true);
+        for (const p of picked) {
+          const fd = new FormData();
+          fd.append('file', p.file);
+          const res = await api.request<any>('/api/media/upload', { method: 'POST', body: fd });
+          if (res?.url) imageUrls.push(res.url);
+        }
+        setUploading(false);
+      }
       const ticket = await api.post<any>('/api/support/tickets/create', {
         title: title.trim(),
         description: description.trim(),
         priority,
         status: 'open',
         captchaRayId,
+        imageUrls,
         ...(isAppeal ? { appealRayId } : {}),
       });
       router.push(`/tickets/${ticket.id}`);
     } catch (e: any) {
       setError(e?.message || 'Failed to create ticket');
       setSubmitting(false);
+      setUploading(false);
     }
+  };
+
+  const onPick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []).filter(f => f.type.startsWith('image/')).slice(0, 6 - picked.length);
+    const next = files.map(file => ({ file, preview: URL.createObjectURL(file) }));
+    setPicked(p => [...p, ...next].slice(0, 6));
+    e.target.value = '';
+  };
+
+  const removePick = (idx: number) => {
+    setPicked(p => {
+      URL.revokeObjectURL(p[idx].preview);
+      return p.filter((_, i) => i !== idx);
+    });
   };
 
   return (
@@ -110,6 +140,36 @@ Please review and unblock my form.`
               placeholder="Describe your issue in detail..."
               rows={6}
               className="w-full px-4 py-3 border-2 border-[var(--color-border)] bg-[var(--color-surface)] text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-tertiary)] outline-none focus:border-[var(--color-primary)] focus:shadow-brutal-sm transition-all resize-none" />
+          </div>
+
+          <div className="mb-6">
+            <label className="text-sm font-medium text-[var(--color-text)] mb-1.5 block">Attachments (optional)</label>
+            {picked.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-3">
+                {picked.map((p, i) => (
+                  <div key={i} className="relative">
+                    <img src={p.preview} alt="preview" className="h-16 w-16 rounded-lg object-cover border border-[var(--color-border)]" />
+                    <button
+                      type="button"
+                      onClick={() => removePick(i)}
+                      className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-black/80 text-white border border-white/20 hover:bg-black transition-colors"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              disabled={uploading || picked.length >= 6}
+              className="inline-flex items-center gap-2 px-4 py-2.5 border-2 border-[var(--color-border)] bg-[var(--color-surface)] text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:border-[var(--color-primary)] transition-all disabled:opacity-40"
+            >
+              {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Paperclip className="w-4 h-4" />}
+              {uploading ? 'Uploading...' : picked.length > 0 ? `Add more (${picked.length}/6)` : 'Add images'}
+            </button>
+            <input ref={fileRef} type="file" accept="image/*" multiple hidden onChange={onPick} />
           </div>
 
           {error && (

@@ -1,42 +1,238 @@
 @import "tailwindcss";
-@import "@tirbeo/theme/styles.css";
-@import "@tirbeo/theme/brutal.css";
+@import "@tirbeo/theme/shared.css";
 
-/* ─── Theme toggle — brutalist square, fixed bottom-right ───
-   Bottom-right avoids the shell's sticky topbar (search + bell + help +
-   app-launcher live at top-right). */
-.theme-toggle {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 100;
-  width: 44px;
-  height: 44px;
+/* ═══════════════════════════════════════════════════════════════════════════
+   Support App — Additional Styles
+   (Base theme is provided by @tirbeo/theme/shared.css)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Ticket List */
+.ticket-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.ticket-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border-subtle);
+  transition: background-color 150ms ease;
+  cursor: pointer;
+}
+
+.ticket-item:hover {
+  background: var(--color-bg-hover);
+}
+
+.ticket-item:last-child {
+  border-bottom: none;
+}
+
+.ticket-item.unread {
+  background: var(--color-bg-muted);
+}
+
+/* Ticket Status */
+.ticket-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ticket-status.open {
+  background: var(--color-success-surface);
+  color: var(--color-success);
+}
+
+.ticket-status.pending {
+  background: var(--color-warning-surface);
+  color: var(--color-warning);
+}
+
+.ticket-status.closed {
+  background: var(--color-bg-hover);
+  color: var(--color-text-muted);
+}
+
+/* Ticket Priority */
+.ticket-priority {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ticket-priority.high {
+  color: var(--color-error);
+}
+
+.ticket-priority.medium {
+  color: var(--color-warning);
+}
+
+.ticket-priority.low {
+  color: var(--color-text-muted);
+}
+
+/* Ticket Header */
+.ticket-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: var(--bg-surface);
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
-  color: var(--text);
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-muted);
+}
+
+.ticket-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.ticket-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* Ticket Body */
+.ticket-body {
+  padding: 20px;
+  min-height: 400px;
+}
+
+/* Message Thread */
+.message-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.message-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.message-item.agent {
+  background: var(--color-info-surface);
+  border-color: var(--color-info);
+}
+
+/* Message Author */
+.message-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.message-author-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.message-author-role {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  padding: 2px 8px;
+  background: var(--color-bg-hover);
+  border-radius: 12px;
+}
+
+.message-time {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-left: auto;
+}
+
+/* Reply Box */
+.reply-box {
+  padding: 16px 20px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-muted);
+}
+
+.reply-input {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--color-text);
+  resize: vertical;
+  transition: border-color 150ms ease;
+}
+
+.reply-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-ring);
+}
+
+.reply-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.reply-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+/* FAQ Section */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.faq-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
   cursor: pointer;
-  box-shadow: 4px 4px 0 0 var(--border);
+  text-align: left;
 }
 
-.theme-toggle:hover {
-  color: var(--on-accent);
-  background: var(--accent);
-  border-color: var(--border);
-  box-shadow: 5px 5px 0 0 var(--border);
-  transform: translate(-2px, -2px);
+.faq-question:hover {
+  background: var(--color-bg-hover);
 }
 
-/* Fade-in for client transitions */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.fade-in {
-  animation: fadeIn 0.18s ease forwards;
+.faq-answer {
+  padding: 0 16px 16px;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
 }

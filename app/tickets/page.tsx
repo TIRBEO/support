@@ -39,7 +39,7 @@ export default function TicketsPage() {
   const loadTickets = async () => {
     try {
       const data = await api.get<any>('/api/support/tickets?limit=50');
-      setTickets(data.data || []);
+      setTickets(data.tickets || data.data || []);
     } catch {}
     setLoading(false);
   };

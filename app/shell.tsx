@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import {
   DashboardShell,
@@ -39,6 +40,13 @@ export function SupportShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const { isDark, toggle } = useThemeToggle();
+
+  // Apply theme classes to root element
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle("dark", isDark);
+    root.classList.toggle("light", !isDark);
+  }, [isDark]);
 
   return (
     <>

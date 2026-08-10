@@ -1,4 +1,5 @@
 import { api, ApiError } from './api-client';
+import { notifyLogin, notifyLogout, onSessionEvent, setupVisibilityListener } from './session-sync';
 
 export interface User {
   id: string;
@@ -10,14 +11,52 @@ export interface User {
 
 let currentUser: User | null = null;
 let fetchPromise: Promise<User | null> | null = null;
+let lastFetchTime = 0;
+const CACHE_TTL = 30000;
+let syncInitialized = false;
+
+function initSessionSync() {
+  if (syncInitialized || typeof window === 'undefined') return;
+  syncInitialized = true;
+
+  onSessionEvent((event) => {
+    if (event.type === 'logout') {
+      currentUser = null;
+      lastFetchTime = 0;
+      window.location.href = getLoginUrl();
+    } else if (event.type === 'login') {
+      currentUser = null;
+      lastFetchTime = 0;
+      getCurrentUser();
+    } else if (event.type === 'session-invalid') {
+      currentUser = null;
+      lastFetchTime = 0;
+      window.location.href = getLoginUrl();
+    }
+  });
+
+  setupVisibilityListener(() => {
+    currentUser = null;
+    lastFetchTime = 0;
+    getCurrentUser();
+  }, 60000);
+}
+
+if (typeof window !== 'undefined') {
+  initSessionSync();
+}
 
 export async function getCurrentUser(): Promise<User | null> {
-  if (currentUser) return currentUser;
+  const now = Date.now();
+  if (currentUser && (now - lastFetchTime) < CACHE_TTL) {
+    return currentUser;
+  }
   if (fetchPromise) return fetchPromise;
   fetchPromise = (async () => {
     try {
       const data = await api.get<any>('/api/users/me');
       currentUser = data || null;
+      lastFetchTime = Date.now();
       return currentUser;
     } catch (e) {
       if (e instanceof ApiError && e.status === 401) return null;
@@ -29,7 +68,10 @@ export async function getCurrentUser(): Promise<User | null> {
   return fetchPromise;
 }
 
-export function clearUser() { currentUser = null; }
+export function clearUser() {
+  currentUser = null;
+  lastFetchTime = 0;
+}
 
 export function getLoginUrl() {
   const redirect = typeof window !== 'undefined' ? encodeURIComponent(window.location.href) : '';
@@ -49,6 +91,7 @@ export function accountsUrl(path = '/'): string {
 }
 
 export async function logout() {
+  notifyLogout();
   try { await api.post('/api/auth/logout'); } catch {}
   clearUser();
   if (typeof window !== 'undefined') window.location.href = getLoginUrl();
